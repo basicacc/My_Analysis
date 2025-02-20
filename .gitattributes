@@ -1,1 +1,2 @@
 /Malware_1/ProcMon/After_UPX_Decompressed.XML filter=lfs diff=lfs merge=lfs -text
+/Malware_2/Video/malware.mp4 filter=lfs diff=lfs merge=lfs -text
