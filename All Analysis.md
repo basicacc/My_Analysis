@@ -12,9 +12,9 @@ https://www.virustotal.com/gui/file/48126e558daec7e93f455c1268e37cab6e4754e24556
 VIDAR Malware
 
 Dropper
-SHA256: [[b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f]]
+SHA256: [b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f][https://github.com/basicacc/My_Analysis/blob/main/Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.md]
 https://www.virustotal.com/gui/file/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f
 
 Logger/Stealer
-SHA256: [[9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed]]
+SHA256: [9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed][https://github.com/basicacc/My_Analysis/blob/main/Vidar/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed.md]
 https://www.virustotal.com/gui/file/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed
