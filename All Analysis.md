@@ -3,12 +3,12 @@
 Dropper
 SHA256: [b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f](https://github.com/basicacc/My_Analysis/blob/main/Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.md)
 
-https://www.virustotal.com/gui/file/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f
+[VirusTotal](https://www.virustotal.com/gui/file/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f)
 
 Logger/Stealer
 SHA256: [9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed](https://github.com/basicacc/My_Analysis/blob/main/Vidar/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed.md)
 
-https://www.virustotal.com/gui/file/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed
+[VirusTotal](https://www.virustotal.com/gui/file/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed)
 ### REMCOS RAT Malware
 sha256: [52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8](https://github.com/basicacc/My_Analysis/blob/main/Remcos/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8.md)
 
