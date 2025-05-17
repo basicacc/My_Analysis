@@ -15,10 +15,15 @@ sha256: [52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8](https
 [VirusTotal](https://www.virustotal.com/gui/file/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8/details)
 
 ### SMOKELOADER Malware
-sha256: [ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676](https://github.com/basicacc/My_Analysis/blob/main/Remcos/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8.md)
+sha256: [ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676](https://github.com/basicacc/My_Analysis/blob/main/SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md)
 
 [VirusTotal](https://www.virustotal.com/gui/file/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676/details)
 
+
+### SNAKEKEYLOGGER Malware
+sha256: [fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e](https://github.com/basicacc/My_Analysis/blob/main/SnakeKeylogger/fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e.md)
+
+[VirusTotal](https://www.virustotal.com/gui/file/fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e/details)
 ### Analyzed just for practice and fun
 
 SHA256: [fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894](https://github.com/basicacc/My_Analysis/blob/main/Malware_1/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.md)
