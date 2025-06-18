@@ -1,0 +1,197 @@
+{
+  "main": {
+    "id": "9dbb4d490c183a83",
+    "type": "split",
+    "children": [
+      {
+        "id": "dc25a66bf5b9593f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2cc646ce62ec7279",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SUMMARY.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "SUMMARY"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "99fd67d3c8f244e7",
+    "type": "split",
+    "children": [
+      {
+        "id": "1978c079e53db248",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0a2b7b3f41972d76",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "a6b5b1ac2ba031a5",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "b5f691a4cb81de14",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "42a73cce65a81a76",
+    "type": "split",
+    "children": [
+      {
+        "id": "f510594b3e3061ce",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4e0164e63c6f118a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "All_Analysis.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for All_Analysis"
+            }
+          },
+          {
+            "id": "2d9651a5cbed56ba",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "All_Analysis.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from All_Analysis"
+            }
+          },
+          {
+            "id": "7a0999238e3bbf68",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "b13d1e002b1c3934",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "All_Analysis.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of All_Analysis"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "2cc646ce62ec7279",
+  "lastOpenFiles": [
+    "AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.md",
+    "Remcos/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8.md",
+    "AgendaRansomware/empty.md",
+    "All_Analysis.md",
+    "SUMMARY.md",
+    "AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.html.md",
+    "README.md",
+    "AgendaRansomware",
+    "Malware_1/empty.md",
+    "Remcos/empty.md",
+    "SmokeLoader/empty.md",
+    "SnakeKeylogger/empty.md",
+    "Vidar/empty.md",
+    "SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md",
+    "SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.html.md",
+    "SomeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md",
+    "Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.md",
+    "Vidar/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed.md",
+    "Malware_2/48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7.html.md",
+    "Malware_2/48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7.md",
+    "Malware_1/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.md",
+    "SnakeKeylogger/fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e.md",
+    "SomeLoader"
+  ]
+}
