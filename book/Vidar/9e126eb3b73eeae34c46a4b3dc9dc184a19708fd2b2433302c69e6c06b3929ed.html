@@ -1,0 +1,410 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Logger/Stealer - My Analysis</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">My Analysis</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>To start Analysis, I put updater.exe in %LOCALAPPDATA%.
+Uncheck "DLL can move" in DllCharacteristics.
+Load malware inside x32dbg</p>
+<p>Checking the strings of malware, C2 server's http address can be seen:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/1.png?raw=true" width="1000">
+And as it can be seen from strings, malware utilizes third string as user_agent.</p>
+<p>Now the important part for us is, <code>CreateProcessW</code> which creates another process of itself from same directory. My guess is, it is used for avoiding detection, later current process will write memory of child process:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/2.png?raw=true" width="1000">
+<p>in our case, 0x43C is handle to child process and <code>0x3FC0E60</code> is address of the data that will be written into <code>0x400000</code> and size is <code>0x400</code>, this WriteProcessMemory will happen a lot of times in a row, especially in  7 times a row:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/3.png?raw=true" width="1000">
+<p>I dont want to list all <code>WriteMemoryProcess</code> as later we can just check <code>0x400000</code> in child process if needed. The last <code>WriteProcessMemory</code> address is <code>0xE4F008</code> (changes everytime).</p>
+<p>as we move along, <code>ResumeThread</code> function is called in parent process, which will start the logger (child process). I attach debugger to child process and continue process in parent process.</p>
+<p>After checking strings of child process, it can be seen, it needs 149 functions from these dlls:
+kernel32, ntdll, advapi32, user32, gdi32, shell32, ole32, ws2_32, shlwapi, wininet, bcrypt, dbghelp, msvcrt</p>
+<p>Now the important part starts for us at <code>0x417210</code>, analyzing this process step by step is a little difficult because of so many unnecessary/necessary jumps, there is just a lot, so it doesn't help. Even just putting breakpoints over the functions that process will call, can be easier.</p>
+<p>Later in process, a new directory will be created under <code>C:\ProgramData\</code> with random name. (in my case <code>y5ppz</code>)</p>
+<p>InternetCrackUrlA will be called to crack https://t.me/l793oy into components</p>
+<p>InternetConnectA used to connect <code>t.me</code> using handle returned by InternetOpenA</p>
+<p>HttpOpenRequestA sends request using handle to t.me:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/4.png?raw=true" width="1000">
+<p>After <code>t.me</code>, process will do same things for <code>https://e.mx.goldenloafuae.com</code> which I suspect is C2. some sandboxes, analyzers didn't specify this url and at the moment this server is down.</p>
+<p>As <code>https://e.mx.goldenloafuae.com</code> is still up, it was obvious that malware was sending, getting encrypted data. Such paths that were queried by malware were:</p>
+<p>"C:\Users\eyes\AppData\Local\Google\Chrome\User Data\<em>.</em>"
+"C:\Users\eyes\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\nkbihfbeogaeaoehlefnkodbefgpgknn\<em>.</em>"</p>
+<p>Later the files that were found would be copied into the folder that was created by malware:</p>
+<p>CopyFileA (function used)
+1: "C:\Users\eyes\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\nkbihfbeogaeaoehlefnkodbefgpgknn\000004.log"
+2: "C:\ProgramData\y5ppz\jmgvk6ppph4e"</p>
+<p>After sending files to attackers, malware deletes files.</p>
+<p>I will also attach 1 example file that was copied (which is hard to make sense).</p>
+<p>Also don't forget, in my case only <code>Chrome</code> was installed, so it only stole its logs. The malware looks for:</p>
+<ol>
+<li>
+<p><strong>Microsoft Edge</strong></p>
+<ul>
+<li>Path: <code>\Microsoft\Edge Beta\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Google Chrome</strong></p>
+<ul>
+<li>Path: <code>\Google\Chrome SxS\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Microsoft Edge SxS</strong></p>
+<ul>
+<li>Path: <code>\Microsoft\Edge SxS\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Epic Privacy Browser</strong></p>
+<ul>
+<li>Path: <code>\Epic Privacy Browser\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>CocCoc Browser</strong></p>
+<ul>
+<li>Path: <code>\CocCoc\Browser\User Data</code></li>
+</ul>
+</li>
+</ol>
+<p>and the reason it checks extensions is:</p>
+<ol>
+<li>
+<p><strong>TON Wallet</strong></p>
+</li>
+<li>
+<p><strong>MyTonWallet</strong></p>
+</li>
+<li>
+<p><strong>Alephium Wallet</strong></p>
+</li>
+<li>
+<p><strong>Solflare</strong></p>
+</li>
+<li>
+<p><strong>Trust Wallet</strong></p>
+</li>
+<li>
+<p><strong>Hashpack</strong></p>
+</li>
+<li>
+<p><strong>Leap Terra</strong></p>
+</li>
+<li>
+<p><strong>Authenticator</strong></p>
+</li>
+<li>
+<p><strong>Bitwarden</strong></p>
+</li>
+<li>
+<p><strong>Oxygen (Atomic)</strong></p>
+</li>
+<li>
+<p><strong>Ecto Wallet</strong></p>
+</li>
+<li>
+<p><strong>Morphis Wallet</strong></p>
+</li>
+<li>
+<p><strong>GeroWallet</strong></p>
+</li>
+<li>
+<p><strong>UniSat Wallet</strong></p>
+</li>
+<li>
+<p><strong>Pontem Wallet</strong></p>
+</li>
+<li>
+<p><strong>Xverse Wallet</strong></p>
+</li>
+<li>
+<p><strong>Venom Wallet</strong></p>
+</li>
+<li>
+<p><strong>PaliWallet</strong></p>
+</li>
+<li>
+<p><strong>Fluvi Wallet</strong></p>
+</li>
+<li>
+<p><strong>Backpack Wallet</strong></p>
+</li>
+<li>
+<p><strong>OKX Web3 Wallet</strong></p>
+</li>
+<li>
+<p><strong>HAVAH Wallet</strong></p>
+</li>
+<li>
+<p><strong>OpenMask Wallet</strong></p>
+</li>
+<li>
+<p><strong>Rainbow Wallet</strong></p>
+</li>
+<li>
+<p><strong>SafePal Wallet</strong></p>
+</li>
+<li>
+<p><strong>KardiaChain</strong></p>
+</li>
+<li>
+<p><strong>RoninWalletEdge</strong></p>
+</li>
+<li>
+<p><strong>NamiWallet</strong></p>
+</li>
+<li>
+<p><strong>KeePass Tusk</strong></p>
+</li>
+<li>
+<p><strong>Frontier Wallet</strong></p>
+</li>
+<li>
+<p><strong>Bitget Wallet</strong></p>
+</li>
+<li>
+<p><strong>CyanoWallet</strong></p>
+</li>
+<li>
+<p><strong>Ronin Wallet</strong></p>
+</li>
+<li>
+<p><strong>MetaMask</strong></p>
+</li>
+<li>
+<p><strong>Talisman Wallet</strong></p>
+</li>
+</ol>
+<p>as it was clear how malware was functioning, I stopped analyzing.
+There were other notable functionalities of malware such as mapping hostnames of AVs to 127.0.0.1 so user will not be able to use any AV (Download or online check)</p>
+<p>My suspicion is "https://t.me/l793oy" and "https://steamcommunity.com/profiles/76561199829660832" are used for C2 server</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../Remcos/empty.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../Remcos/empty.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
