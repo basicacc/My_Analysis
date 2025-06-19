@@ -42,17 +42,6 @@
         <script src="toc.js"></script>
     </head>
     <body>
-    <div id="mdbook-help-container">
-        <div id="mdbook-help-popup">
-            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
-            <div>
-                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
-                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
-                <p>Press <kbd>?</kbd> to show this help</p>
-                <p>Press <kbd>Esc</kbd> to hide this help</p>
-            </div>
-        </div>
-    </div>
     <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
@@ -130,7 +119,7 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -537,11 +526,13 @@ Note: You can also patch IsDebuggerPresent and debugger without any issue, or ju
 <p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_6/3.png?raw=true" alt="1|500" /></p>
 <p>So, it is obvious, this function searches for specific function name, if you put breakpoint at _wcscmp <code>0x41C654</code>, you can see every function it tries to search for and maybe you can even trace into the functions for more detail.</p>
 <p>I believe this is enough for SnakeKeylogger analysis.</p>
-<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>I wanted to analyze my first ransomware to learn something new and chose AgendaRansomware (I don't really know why). Anyways this is a 1.6mb rustc compiled binary. At first sight, it feels like there is no deobfuscation and easy to analyze, but later on I found out, there is something disrupting static analysis. So far I found 2 things:</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>Note: I usually analyze malware and write randomly to remember my progress, most of my reports are not detailed and clean, it is just like a diary.</p>
+<p>Day 1:</p>
+<p>I wanted to analyze my first ransomware to learn something new and chose AgendaRansomware (I don't really know why). Anyways this is a 1.6mb rustc compiled binary. At first sight, it feels like there is no deobfuscation and easy to analyze, but later on I found out, there is something disrupting static analysis. So far I found 2 things:</p>
 <p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/1.png?raw=true" alt="1|500" /></p>
 <p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/2.png?raw=true" alt="1|500" /></p>
 <p>Ghidra can't disassemble because of these 2 additions made on malware, but luckly it is easy to fix, I will just write script to replace all of them with "NOP" and issue will (probably) going to be solved.</p>
-<p>Other than that, I found out we have to provide "--password &lt;pass&gt;"  to binary, else it will not be executed. That password is actually used later on for logining to a domain in tor network and requesting chiper/tool to decrypt files (by paying for it). Other than that, Malware also gives us logs:</p>
+<p>Other than that, I found out we have to provide "--password &lt;pass&gt;"  to binary, else it will not be executed. That password is actually used later as login credential to a domain in tor network and requesting chiper/tool to decrypt files (by paying for it). Other than that, Malware also gives us logs:</p>
 <pre><code>[WARNING] Cannot open service: [BrokerInfrastructure]: 5                                                                Service [CryptSvc] stopped                                                                                              Service [CryptSvc] disabled                                                                                             Service [DoSvc] stopped                                                                                                 [WARNING] Cannot disable [DoSvc]: 5                                                                                     [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled                                                                                               [WARNING] Cannot stop [EventLog]: 1051                                                                                  Service [EventLog] disabled                                                                                             [WARNING] Cannot open service: [gpsvc]: 5                                                                               [WARNING] Cannot open service: [MDCoreSvc]: 5                                                                           [WARNING] Cannot open service: [mpssvc]: 5                                                                              [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled 
 </code></pre>
 <p>And more, like which file it encrypted etc.</p>
@@ -584,6 +575,24 @@ login: 6f031ccd-526a-4806-82a8-2e7d926243d4
 password: test
 
 </code></pre>
+<p>After walking inside the binary a little bit, i found out that, "CreateThread" functions play big role in the malware, in some parts of the malware, payloads are, let's say "hidden" and malware use "CreateThread" to start execution from these address. in ghidra they are not disassembled, instead shown as "DATA". My main purpose in this malware is finding out how the files are encrypted. Additionally, malware also disables some services, choosing which files to encrpyt (by comparing with the extensions), which I might look into deeply.</p>
+<p>What I found out from dynamic analysis is, malware uses EnterCriticalSection API to check file extensions and encrypt if it doesn't get in conflict.</p>
+<p>Day 2:</p>
+<p>Alright so today I got a little bit near to success, as I found out where malware decrypts strings. And luckly it doesn't encrypt back so i can dump them all. it is going to help a lot for success.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/13.png?raw=true" alt="1|800" /></p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/4.png?raw=true" alt="1|800" /></p>
+<p>Note: I will dump as many as strings possible (all of them) and save it in a file and save in github repo.</p>
+<p>Additionally, I found out malware uses GetProcAddress to get NtWriteFile address and call it in a stealthy way. How it works is exactly like this:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/5.png?raw=true" alt="1|800" /></p>
+<p>Changes function itself with "NtWriteFile" address, so next time it calls this function, it actually calls itself. Same thing was done for other functions too, like: NtReadFile, NtCreateKeyedEvent...</p>
+<p>Process of encryption:</p>
+<p>NtCreateFile: get file handle
+NtQueryInformationVolume, NtQueryInformationFile: Check the extension of file (eg. .exe) compare with blacklisted extensions and choose to encrypt or not.  The flags that can be configured before running ransomware are: skip, step, n, p, fast, accounts. In my version of agenda ransomware there is no guide on how to use them and some flags that are available in newer versions are not available to me. Example usage is this: " ./ransomware.exe --password test "skip: 10; fast" "</p>
+<p>NtCloseFile</p>
+<p>NtReadFile: Read contents, encypt them.</p>
+<p>NtWriteFile: Write encrypted content.</p>
+<p>Now, where is content encypted? in my version of agenda ransomware, function is located at <code>0x42edf0</code> which, using registers as arguments instead of stack. The decompiled function has length of around 875 lines, which is waste of time to analyze one by one. But it is the function. Additonally, analyzing this function will reveal the key itself.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/6.png?raw=true" alt="1|800" /></p>
 <div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>File is probably dropper, trying to install dangerous malware from spinistry.com.</p>
 <p>The malware has actually a few more steps,, creating a new file to keep running from different directory. All files will be placed on the directory about analysis.</p>
 <p>In our case fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.exe is dropper.</p>
