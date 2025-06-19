@@ -1,0 +1,733 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>My Analysis</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">My Analysis</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h3 id="vidar-malware"><a class="header" href="#vidar-malware">VIDAR Malware</a></h3>
+<p>Dropper
+SHA256: <a href="Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.html">b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f</a></p>
+<p><a href="https://www.virustotal.com/gui/file/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f/details">VirusTotal</a></p>
+<p>Logger/Stealer
+SHA256: <a href="Vidar/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed.html">9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed</a></p>
+<p><a href="https://www.virustotal.com/gui/file/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed/details">VirusTotal</a></p>
+<h3 id="remcos-rat-malware"><a class="header" href="#remcos-rat-malware">REMCOS RAT Malware</a></h3>
+<p>sha256: <a href="Remcos/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8.html">52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8</a></p>
+<p><a href="https://www.virustotal.com/gui/file/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8/details">VirusTotal</a></p>
+<h3 id="smokeloader-malware"><a class="header" href="#smokeloader-malware">SMOKELOADER Malware</a></h3>
+<p>sha256: <a href="SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.html">ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676</a></p>
+<p><a href="https://www.virustotal.com/gui/file/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676/details">VirusTotal</a></p>
+<h3 id="snakekeylogger-malware"><a class="header" href="#snakekeylogger-malware">SNAKEKEYLOGGER Malware</a></h3>
+<p>sha256: <a href="SnakeKeylogger/fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e.html">fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e</a></p>
+<p><a href="https://www.virustotal.com/gui/file/fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e/details">VirusTotal</a></p>
+<h3 id="agendaransomware-malware"><a class="header" href="#agendaransomware-malware">AGENDARANSOMWARE Malware</a></h3>
+<p>sha256: <a href="AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.html">e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527</a></p>
+<p><a href="https://www.virustotal.com/gui/file/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527/details">VirusTotal</a></p>
+<h3 id="analyzed-just-for-practice-and-fun"><a class="header" href="#analyzed-just-for-practice-and-fun">Analyzed just for practice and fun</a></h3>
+<p>SHA256: <a href="Malware_1/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.html">fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894</a></p>
+<p><a href="https://www.virustotal.com/gui/file/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894/details">VirusTotal</a></p>
+<p>SHA256: <a href="Malware_2/48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7.html">48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7</a></p>
+<p><a href="https://www.virustotal.com/gui/file/48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7/details">VirusTotal</a></p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>This is a dropper ps1 script for <code>Vidar</code> malware.</p>
+<p>Variables are encoded after starting script, my guess is this way used for evading AVs.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Dropper/1.png?raw=true" width="1000">
+Looking at the decoded variables, script's functionality can be guessed.</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Dropper/2.png?raw=true" width="1000">
+This part will create `%LOCALAPPDATA%` if it doesn't exist. Out-Null is used to not output anything to pipelines.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Dropper/3.png?raw=true" width="1000">
+This is the location the file will be saved.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Dropper/4.png?raw=true" width="1000">
+First command will download malware from `https://vx-events.com/build.exe`, in case of error, process will stop.
+Second command will hide the folder. (C:\Users\\\<user>\AppData\Local)
+Third command will hide the file. (C:\Users\\\<user>\AppData\Local\updater.exe)
+<p>Now, Add-Exclusion is a function, that is used for defence evasion:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Dropper/5.png?raw=true" width="1000">
+Add-MpPreference is used for modifying Windows Defender settings. This command will try to add new Exclusion Path to defender, which is:
+`C:\Users\<user>\AppData\Local\updater.exe`
+<p>Start-Process, will start the <code>C:\Users\&lt;user&gt;\AppData\Local\updater.exe</code> with Window Style hidden, <code>Run as Administrator</code> option, and -Wait is used to <code>suppresses the command prompt until the processes finish</code>.</p>
+<p><code>finally</code> part is used to remove clean everything, leave a fake message to Host and finish script.</p>
+<p>Continue: <a href="Vidar/9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed.html">9e126eb3b73eeae34c46a4b3dc9dc184a19708fd2b2433302c69e6c06b3929ed</a></p>
+<div style="break-before: page; page-break-before: always;"></div><p>To start Analysis, I put updater.exe in %LOCALAPPDATA%.
+Uncheck "DLL can move" in DllCharacteristics.
+Load malware inside x32dbg</p>
+<p>Checking the strings of malware, C2 server's http address can be seen:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/1.png?raw=true" width="1000">
+And as it can be seen from strings, malware utilizes third string as user_agent.</p>
+<p>Now the important part for us is, <code>CreateProcessW</code> which creates another process of itself from same directory. My guess is, it is used for avoiding detection, later current process will write memory of child process:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/2.png?raw=true" width="1000">
+<p>in our case, 0x43C is handle to child process and <code>0x3FC0E60</code> is address of the data that will be written into <code>0x400000</code> and size is <code>0x400</code>, this WriteProcessMemory will happen a lot of times in a row, especially in  7 times a row:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/3.png?raw=true" width="1000">
+<p>I dont want to list all <code>WriteMemoryProcess</code> as later we can just check <code>0x400000</code> in child process if needed. The last <code>WriteProcessMemory</code> address is <code>0xE4F008</code> (changes everytime).</p>
+<p>as we move along, <code>ResumeThread</code> function is called in parent process, which will start the logger (child process). I attach debugger to child process and continue process in parent process.</p>
+<p>After checking strings of child process, it can be seen, it needs 149 functions from these dlls:
+kernel32, ntdll, advapi32, user32, gdi32, shell32, ole32, ws2_32, shlwapi, wininet, bcrypt, dbghelp, msvcrt</p>
+<p>Now the important part starts for us at <code>0x417210</code>, analyzing this process step by step is a little difficult because of so many unnecessary/necessary jumps, there is just a lot, so it doesn't help. Even just putting breakpoints over the functions that process will call, can be easier.</p>
+<p>Later in process, a new directory will be created under <code>C:\ProgramData\</code> with random name. (in my case <code>y5ppz</code>)</p>
+<p>InternetCrackUrlA will be called to crack https://t.me/l793oy into components</p>
+<p>InternetConnectA used to connect <code>t.me</code> using handle returned by InternetOpenA</p>
+<p>HttpOpenRequestA sends request using handle to t.me:</p>
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_3/Logger_Stealer/4.png?raw=true" width="1000">
+<p>After <code>t.me</code>, process will do same things for <code>https://e.mx.goldenloafuae.com</code> which I suspect is C2. some sandboxes, analyzers didn't specify this url and at the moment this server is down.</p>
+<p>As <code>https://e.mx.goldenloafuae.com</code> is still up, it was obvious that malware was sending, getting encrypted data. Such paths that were queried by malware were:</p>
+<p>"C:\Users\eyes\AppData\Local\Google\Chrome\User Data\<em>.</em>"
+"C:\Users\eyes\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\nkbihfbeogaeaoehlefnkodbefgpgknn\<em>.</em>"</p>
+<p>Later the files that were found would be copied into the folder that was created by malware:</p>
+<p>CopyFileA (function used)
+1: "C:\Users\eyes\AppData\Local\Google\Chrome\User Data\Default\Local Extension Settings\nkbihfbeogaeaoehlefnkodbefgpgknn\000004.log"
+2: "C:\ProgramData\y5ppz\jmgvk6ppph4e"</p>
+<p>After sending files to attackers, malware deletes files.</p>
+<p>I will also attach 1 example file that was copied (which is hard to make sense).</p>
+<p>Also don't forget, in my case only <code>Chrome</code> was installed, so it only stole its logs. The malware looks for:</p>
+<ol>
+<li>
+<p><strong>Microsoft Edge</strong></p>
+<ul>
+<li>Path: <code>\Microsoft\Edge Beta\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Google Chrome</strong></p>
+<ul>
+<li>Path: <code>\Google\Chrome SxS\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Microsoft Edge SxS</strong></p>
+<ul>
+<li>Path: <code>\Microsoft\Edge SxS\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Epic Privacy Browser</strong></p>
+<ul>
+<li>Path: <code>\Epic Privacy Browser\User Data</code></li>
+</ul>
+</li>
+<li>
+<p><strong>CocCoc Browser</strong></p>
+<ul>
+<li>Path: <code>\CocCoc\Browser\User Data</code></li>
+</ul>
+</li>
+</ol>
+<p>and the reason it checks extensions is:</p>
+<ol>
+<li>
+<p><strong>TON Wallet</strong></p>
+</li>
+<li>
+<p><strong>MyTonWallet</strong></p>
+</li>
+<li>
+<p><strong>Alephium Wallet</strong></p>
+</li>
+<li>
+<p><strong>Solflare</strong></p>
+</li>
+<li>
+<p><strong>Trust Wallet</strong></p>
+</li>
+<li>
+<p><strong>Hashpack</strong></p>
+</li>
+<li>
+<p><strong>Leap Terra</strong></p>
+</li>
+<li>
+<p><strong>Authenticator</strong></p>
+</li>
+<li>
+<p><strong>Bitwarden</strong></p>
+</li>
+<li>
+<p><strong>Oxygen (Atomic)</strong></p>
+</li>
+<li>
+<p><strong>Ecto Wallet</strong></p>
+</li>
+<li>
+<p><strong>Morphis Wallet</strong></p>
+</li>
+<li>
+<p><strong>GeroWallet</strong></p>
+</li>
+<li>
+<p><strong>UniSat Wallet</strong></p>
+</li>
+<li>
+<p><strong>Pontem Wallet</strong></p>
+</li>
+<li>
+<p><strong>Xverse Wallet</strong></p>
+</li>
+<li>
+<p><strong>Venom Wallet</strong></p>
+</li>
+<li>
+<p><strong>PaliWallet</strong></p>
+</li>
+<li>
+<p><strong>Fluvi Wallet</strong></p>
+</li>
+<li>
+<p><strong>Backpack Wallet</strong></p>
+</li>
+<li>
+<p><strong>OKX Web3 Wallet</strong></p>
+</li>
+<li>
+<p><strong>HAVAH Wallet</strong></p>
+</li>
+<li>
+<p><strong>OpenMask Wallet</strong></p>
+</li>
+<li>
+<p><strong>Rainbow Wallet</strong></p>
+</li>
+<li>
+<p><strong>SafePal Wallet</strong></p>
+</li>
+<li>
+<p><strong>KardiaChain</strong></p>
+</li>
+<li>
+<p><strong>RoninWalletEdge</strong></p>
+</li>
+<li>
+<p><strong>NamiWallet</strong></p>
+</li>
+<li>
+<p><strong>KeePass Tusk</strong></p>
+</li>
+<li>
+<p><strong>Frontier Wallet</strong></p>
+</li>
+<li>
+<p><strong>Bitget Wallet</strong></p>
+</li>
+<li>
+<p><strong>CyanoWallet</strong></p>
+</li>
+<li>
+<p><strong>Ronin Wallet</strong></p>
+</li>
+<li>
+<p><strong>MetaMask</strong></p>
+</li>
+<li>
+<p><strong>Talisman Wallet</strong></p>
+</li>
+</ol>
+<p>as it was clear how malware was functioning, I stopped analyzing.
+There were other notable functionalities of malware such as mapping hostnames of AVs to 127.0.0.1 so user will not be able to use any AV (Download or online check)</p>
+<p>My suspicion is "https://t.me/l793oy" and "https://steamcommunity.com/profiles/76561199829660832" are used for C2 server</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>At the time of writing it is around a day that malicious script appeared in wild. To practice and improve myself I chose this malware.</p>
+<p>For now in virustotal, it can be seen that malware is only detected by 9 AVs and the server for downloading second payload (<em>png</em> file) is still available to be downloaded.</p>
+<p>Starting with analysis, The file's size is really big but only reason for it was repeat of same 10 lines.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/1.png?raw=true" alt="1|500" /></p>
+<p>Using ASCII table we can replace all occurrences of these variables with their Char values.</p>
+<p>At first it looked like it is only repeating same 10 line for increasing file size (to look legit), but one more reason was probably trying to hide obfuscated code. (Maybe not but only good explanation is this)
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/2.png?raw=true" alt="1|1000" /></p>
+<p>At first it might not make sense but you can obviously see same pattern repeat in obfuscated code:
+<code>"⏳लბ⣿༑₫ᨑԿ🖲ᅫҌ⊣ሒȪ⟚"</code></p>
+<p>and payload use <code>categorised(ByVal inputText)</code> function to deobfuscate it. (By removing repeating line)
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/3.png?raw=true" alt="1|800" /></p>
+<p>In this situation manually writing deobfuscater  would be possible to but, it is waste of time. I just changed <code>dozens = categorised(dozens)</code> with <code>WScript.Echo categorised(dozens)</code> (Don't forget to only copy necessary parts in new file to avoid running something dangerous). I ran the code using <strong>cscript.exe</strong> to see output in my <strong>cmd</strong>.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/4.png?raw=true" alt="1|800" /></p>
+<p>Now to deobfuscate, we need to replace '#' with 'A' and convert base64 to string. Once again instead of using cyberchef I just run powershell code with removing <code>Invoke-Expression</code> and beautify it a little bit. This is the code that downloads second file. (png)</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/5.png?raw=true" alt="1|800" />
+A day later, the malicious file was deleted from server but I installed it before, so I can continue my analysis. I will also upload file to <strong>malware bazaar</strong> for anyone that needs it to analyse on his own.</p>
+<p>This image file has Data starting with '&lt;&lt;BASE64_START&gt;&gt;' and ends with '&lt;&lt;BASE64_END&gt;&gt;' after decoded it is uploaded to memory but I modified code and used function:</p>
+<pre><code class="language-ps1">[System.IO.File]::WriteAllBytes("C:\dnlib_image.dll", $cleared)
+</code></pre>
+<p>to save it in a file and when we load this dll to dnspy-x86, it loads it as <code>Microsoft.Win32.TaskScheduler, Version=1.1.0.0</code> and dnlib inside, which is necessary part of us:
+<img src="https://raw.githubusercontent.com/basicacc/basicacc.github.io/refs/heads/main/My_analysis/Malware_4/6.png" alt="1|800" /></p>
+<p>You can check out <a href="https://github.com/robsonfelix/VMDetector">Robson Felix's VMDetector</a>to understand how it works. I modified qemu strings in my system so I have 0 "qemu" string, which helps me avoid detection. this script is really basic as it checks for only "qemu" (easy to stay undetected).
+Note: Even though this malware has function to check detect vms, it doesn't use it. (if you remember the arguments given when VAI is called, they are necessary part of this function)</p>
+<p>In next line we can see the malicious code calling specific function that is interesting for us, <strong>VAI</strong>.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/7.png?raw=true" alt="1|1000" /></p>
+<p>some of the variable names are written in Spanish, which might be a tip for malware writer being Spanish. (Of course, it is not a guarantee)</p>
+<p>I have written custom code in C# to be able to manually debug this dll.</p>
+<p>The functions, VAI didn't use: persistence, startuptask, startupreg (even though it could). (To make it clear these are not function names, these are variables)</p>
+<p>Moving on, startup_onstart is actually used, let's understand what it does.
+Before understanding the function, I retrivied Hashtable values that are used through dll and saved all of them to single file to make analysis easier.</p>
+<p>This is the part we have to analyze now:</p>
+<pre><code class="language-csharp">if (flag12)
+{
+	bool flag13 = !File.Exists(Path.Combine(caminho, nomedoarquivo + \uE11C.\uE000(12567) + extençao));
+	bool flag14 = flag13;
+	if (flag14)
+	{
+		Process.Start(new ProcessStartInfo
+		{
+			WindowStyle = ProcessWindowStyle.Hidden,
+			FileName = \uE11C.\uE000(12607), // "cmd.exe"
+			Arguments = string.Concat(new string[]
+			{
+				// "/C copy *."
+				\uE11C.\uE000(12599),
+				// "vbs"
+				extençao,
+				// " \""
+				\uE11C.\uE000(12770),
+				//  1. @"C:\ProgramData" 2. "millipascals"
+				Path.Combine(caminho, nomedoarquivo), 
+				// "."
+				\uE11C.\uE000(12567),
+				// "vbs"
+				extençao,
+				// "\""
+				\uE11C.\uE000(12282)
+			})
+		}).WaitForExit();
+	}
+	Loader.ExecutarMetodoVAI(taskname, caminho, nomedoarquivo, extençao);
+}
+</code></pre>
+<p>Basically checks if file exists, if not, starts new process:
+`cmd.exe /C copy *.vbs "C:\ProgramData\millipascals.vbs"
+copies the vbs file to its new location.</p>
+<p><strong>ExecutarMetodoVAI</strong> is called with arguments: <code>"blinkered" @"C:\ProgramData"	"millipascals" "vbs"</code></p>
+<p>at first line, function searches for specific string in resources:
+<code>string text = Array.Find&lt;string&gt;(Assembly.GetExecutingAssembly().GetManifestResourceNames(), new Predicate&lt;string&gt;(Loader.&lt;&gt;c.&lt;&gt;9.\uE000));</code></p>
+<p>When using dnspy, it hides compiler generated types and modules by default which you need to enable.</p>
+<p>The <code>(Loader.&lt;&gt;c.&lt;&gt;9.\uE000)</code> sets condition <strong>true</strong> if "string" ends with "UAC.dll"
+and in next lines, first stream is loaded into an array and array was loaded to caller program (powershell):</p>
+<pre><code class="language-C#">byte[] array;
+using (Stream manifestResourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(text))
+{
+	using (MemoryStream memoryStream = new MemoryStream())
+	{
+		manifestResourceStream.CopyTo(memoryStream);
+		array = memoryStream.ToArray();
+	}
+}
+Assembly assembly = Assembly.Load(array);
+</code></pre>
+<p>and calls "Main" method in UAC.dll (type:UAC.Program).</p>
+<p><img src="https://raw.githubusercontent.com/basicacc/basicacc.github.io/refs/heads/main/My_analysis/Malware_4/8.png" alt="1|800" /></p>
+<p>Which I will use new custom script to run it and debug manually.</p>
+<p>First thing "UAC.dll" does is create a new string:
+<code>@"cmd.exe /c powershell -Command ""schtasks /Create /TN 'blinkered' /TR 'wscript.exe C:\ProgramData\millipascals.vbs' /SC ONSTART /RL HIGHEST /RU SYSTEM /F"""</code> with given parameters.</p>
+<ul>
+<li>Generates new inf file under temporary path.</li>
+<li>Changes "REPLACE_COMMAND_FILE" in <code>private static string INF_TEMPLATE = "[version]\r\nSignature=$chicago$\r\nAdvancedINF=2.5\r\n\r\n[DefaultInstall]\r\nCustomDestination=CustInstDestSectionAllUsers\r\nRunPreSetupCommands=RunPreSetupCommandsSection\r\n\r\n[RunPreSetupCommandsSection]\r\nREPLACE_COMMAND_LINE\r\ntaskkill /IM cmstp.exe /F\r\n\r\n[CustInstDestSectionAllUsers]\r\n49000,49001=AllUSer_LDIDSection, 7\r\n\r\n[AllUSer_LDIDSection]\r\n\"HKLM\", \"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\CMMGR32.EXE\", \"ProfileInstallPath\", \"%UnexpectedError%\", \"\"\r\n\r\n[Strings]\r\nServiceName=\"CorpVPN\"\r\nShortSvcName=\"CorpVPN\"";</code> with the command created before.</li>
+<li>writes this to inf file.</li>
+</ul>
+<p>Part 2:</p>
+<ul>
+<li>Checks if file: "C:\Windows\system32\cmstp.exe" exists.</li>
+<li>if it does, Start new process: <code>C:\Windows\system32\cmstp.exe /au "&lt;inf_file_path&gt;"</code></li>
+<li>Basically creates new process to run at every startup for persistence purposes.</li>
+<li>Why use cmstp.exe? To avoid some detections.</li>
+</ul>
+<p>That's all with UAC.dll, now we have to go back to <code>dnlib.IO.Home.VAI</code>.</p>
+<p>To sum up, in next steps malicious dll function launches MsBuild.exe and modifies its code and resumes thread.</p>
+<ul>
+<li>new process: MsBuild.exe created.</li>
+<li>Allocate new space</li>
+<li>Write the malicious program at address: 0x400000</li>
+</ul>
+<p>What I did was copy every data that is written and combine them to get a single exe file (Microsoft Visual C++ 8)</p>
+<pre><code class="language-console">copy /b to400000.bin+to401000.bin+to459000.bin+to472000.bin+to478000.bin+to47D000.bin combined.exe
+</code></pre>
+<p>So, the reason malware loads the exe file into MsBuild.exe is actually utilizing its capabilities (and hiding). So it might be possible to debug program alone but it is hard, so I will just debug it inside MsBuild.exe. I also found a key point in code like this:
+<code>unaff_ESI = FUN_0040e560(0x400000,0,pcVar7);</code> which I guess probably where we need to start from, because inside this function, it is also prossible to clearly see some interesting strings.
+The strings clearly indicate the capabilities of malware: RAT, keylogger, stealer, logger.</p>
+<p>By the way, Remcos RAT is available <a href="https://breakingsecurity.net/remcos/free/">here</a> to explore its capabilities.</p>
+<p>After analyzing the exe file, the key points that can be addressed is:</p>
+<ol>
+<li>Malware use GetProcAddress function to find address of the functions it is going to use (which can make static analysis a little bit difficult), but you can basically change heap variable name's function name (for example in ghidra)</li>
+<li>Malware keep trying to connect with "relentlesswicked.duckdns.org"/"relentless.webredirect.org", which it can't, because it is down.</li>
+<li>The rest is specifically about remcos itself which if needed can be analyzed on its own, and it is not that hard as it is not packed or obfuscated.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>I started analyzing the malware for a day, mostly using dynamic analyse tools. Normally the file that is downloaded is around 100kb but after unpacking itself, it is around 30kb. We need to put hardware breakpoint at <code>0x401ae0</code> to be able to dynamically debug program. (Note: I also put software breakpoint but after breakpoint hit, I removed it for further analysing).
+Also I dumped process to ghidra, so I can do static analysis too. If you check memory in x32dbg or SystemInformer, everything can be Read/Written/Executed. That's why it can rewrite itself.</p>
+<p>NOTE: The reason, we must not use software breakpoint is, it modifies malware's code by adding <code>CC</code> at start of the assembly code, unpacking the code will cause issues.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_5/11.png?raw=true" alt="1|100" /></p>
+<p>Later analyzing the code, I realized some parts of the executable is still encoded, I let malware execute itself till <code>0x401BCD</code> so it can decode these parts, then dumped. Which later, I realized it didn't really decode and check ghidra again for any tips. There it is, code is actually decoding -&gt; executing -&gt; encoding itself. (Polymorphic) Which is why I couldn't do static analyzes:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_5/12.png?raw=true" alt="1|500" /></p>
+<p>What I will actually do is, again execute code but now, I will stop at when the part is executed so I can copy and paste it into my dumped exe file. For example, <code>0x40410a</code> etc.</p>
+<p>Alright so, I changed bytes of the parts we need for further analyzing. the first function at <code>0x40410a</code> is putting functions' address from dlls to uninitialized DATAs:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_5/13.png?raw=true" alt="1|500" />
+(it is longer)</p>
+<p>It will not be really hard to rename DATAs in ghidra to function names for static analysis. Which is what I am going to do next.</p>
+<p>After Renaming variables, it is a lot more easier to do static analysing but there are still some functions that use <code>decoder()</code> function in itself. That means I have to also rewrite their bytes.</p>
+<p>Okay so as I progress, I try as much as I can to do static analysis and understand each function, I did few discoveries and 1 of the important ones is:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_5/14.png?raw=true" alt="1|500" /></p>
+<p>As I renamed, it checks for file name and returns accordingly, in our case as I run it first time with random name, it will return <code>0x10</code> but there are other possibilities too, which I might check if needed. That's the exact way malware searches for file names:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_5/15.png?raw=true" alt="1|500" /></p>
+<p>Which is not that hard to understand.</p>
+<p>Sadly, while analysing this malware, I had to take break for a while (final exams in university) so I couldn't focus on the malware. But I can say, I did important parts like decoding some parts, to explain what the dropper part does is, (not really dropper because malware itself is actually as a whole doing everything) just delete WinSrv32 file and terminate any process with this name, write itself (or a part of itself), I couldn't analyse these parts as I dont have a lot of time. then start executing itself from there. I will provide smokeloader ghidra zip, because I believe it is not something to drop in trash, maybe 1 day I might come back and look into this and finish the job. I dont really know. (ghidra zip is in same folder as this file). (also provided dd32 file to know where the breakpoint has to be).</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>So normally, it is easier to analyze .NET variants of this malware as there are nearly no obfuscation, (maybe some simple encryption and variable names) so I decided to get C++ compiled binary around 1mb and analyze it, but I checked binary graph, anti-debug techniques and I think only protection they put is, checking if "IsDebuggerPresent", like there is nothing else, everything is so clear so I will just list key points of malware.</p>
+<p>First time I opened malware in ghidra, the thing that was so interesting to me was, there a lot of imports of APIs and none of them were hidden or anything. Just wanted to check 1 of the APIs, found reference to it and traced back to see where the call was from and I hit the jackpot.</p>
+<p>The Function at <code>0x414800</code> :</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_6/1.png?raw=true" alt="1|500" /></p>
+<p>As you can see there is "if" statement, why? at first it actually initialize, the struct of the functions, luckily all of them have clear names so it is easy to understand what they do. Alright so, after initializing,  other functions can search for function names one by one and find the function they need. Also, malware gives an hint on what these are, if you try to search for references of "IsDebuggerPresent", you will find:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_6/2.png?raw=true" alt="1|500" /></p>
+<p>Funny right? Malware literally tells us everything we need. This is AutoIT script, If you wonder what it is, it is used for automation processes using keyboard, mouse movement etc.
+Note: You can also patch IsDebuggerPresent and debugger without any issue, or just use scyllahide.</p>
+<p>Note 2: I also forgot to mention that in "strings" of the malware you can easily see BACKSPACE, ESC, Mouse related strings, numpad etc. the strings that are related to date/time etc.</p>
+<p>What we found out so far is, malware is keylogger and botnet, maybe there are more that I missed but I believe I got everything right.</p>
+<p>Now, to understand in which order the malware calls functions, I found a technique that you can also write r2 or x32dbg script to automate:</p>
+<p>First we put breapoint at, <code>0x414800</code>, after breakpoint is hit, you gonna see the value in stack is "0x0", so it is only for initialization stage, continue one more time and check <code>call stack</code>, call is from <code>0x41C64A</code>.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_6/3.png?raw=true" alt="1|500" /></p>
+<p>So, it is obvious, this function searches for specific function name, if you put breakpoint at _wcscmp <code>0x41C654</code>, you can see every function it tries to search for and maybe you can even trace into the functions for more detail.</p>
+<p>I believe this is enough for SnakeKeylogger analysis.</p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>Note: I usually analyze malware and write randomly to remember my progress, most of my reports are not detailed and clean, it is just like a diary.</p>
+<p>Day 1:</p>
+<p>I wanted to analyze my first ransomware to learn something new and chose AgendaRansomware (I don't really know why). Anyways this is a 1.6mb rustc compiled binary. At first sight, it feels like there is no deobfuscation and easy to analyze, but later on I found out, there is something disrupting static analysis. So far I found 2 things:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/1.png?raw=true" alt="1|500" /></p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/2.png?raw=true" alt="1|500" /></p>
+<p>Ghidra can't disassemble because of these 2 additions made on malware, but luckly it is easy to fix, I will just write script to replace all of them with "NOP" and issue will (probably) going to be solved.</p>
+<p>Other than that, I found out we have to provide "--password &lt;pass&gt;"  to binary, else it will not be executed. That password is actually used later as login credential to a domain in tor network and requesting chiper/tool to decrypt files (by paying for it). Other than that, Malware also gives us logs:</p>
+<pre><code>[WARNING] Cannot open service: [BrokerInfrastructure]: 5                                                                Service [CryptSvc] stopped                                                                                              Service [CryptSvc] disabled                                                                                             Service [DoSvc] stopped                                                                                                 [WARNING] Cannot disable [DoSvc]: 5                                                                                     [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled                                                                                               [WARNING] Cannot stop [EventLog]: 1051                                                                                  Service [EventLog] disabled                                                                                             [WARNING] Cannot open service: [gpsvc]: 5                                                                               [WARNING] Cannot open service: [MDCoreSvc]: 5                                                                           [WARNING] Cannot open service: [mpssvc]: 5                                                                              [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled 
+</code></pre>
+<p>And more, like which file it encrypted etc.</p>
+<p>README-RECOVER-&lt;extension&gt;.txt contains this:</p>
+<pre><code>-- Qilin
+
+Your network/system was encrypted.
+Encrypted files have new extension.
+
+-- Compromising and sensitive data
+
+We have downloaded compromising and sensitive data from you system/network
+If you refuse to communicate with us and we do not come to an agreementyour data will be published.
+Data includes:
+    - Employees personal dataCVsDLSSN.
+    - Complete network map including credentials for local and remote services.
+    - Financial information including clients databillsbudgetsannual reportsbank statements.
+    - Complete datagrams/schemas/drawings for manufacturing in solidworks format
+    - And more...
+
+-- Warning
+
+1) If you modify files - our decrypt software won't able to recover data
+2) If you use third party software - you can damage/modify files (see item 1)
+3) You need cipher key / our decrypt software to restore you files.
+4) The police or authorities will not be able to help you get the cipher key. We encourage you to consider your decisions.
+
+-- Recovery
+
+1) Download tor browser: https://www.torproject.org/download/
+2) Go to domain
+3) Enter credentials
+
+
+-- Credentials
+
+Extension: MmXReVIxLV
+Domain: ueegj65kwr3v3sjhli73gjtmfnh2uqlte3vyg2kkyqq7cja2yx2ptaad.onion
+login: 6f031ccd-526a-4806-82a8-2e7d926243d4 
+password: test
+
+</code></pre>
+<p>After walking inside the binary a little bit, i found out that, "CreateThread" functions play big role in the malware, in some parts of the malware, payloads are, let's say "hidden" and malware use "CreateThread" to start execution from these address. in ghidra they are not disassembled, instead shown as "DATA". My main purpose in this malware is finding out how the files are encrypted. Additionally, malware also disables some services, choosing which files to encrpyt (by comparing with the extensions), which I might look into deeply.</p>
+<p>What I found out from dynamic analysis is, malware uses EnterCriticalSection API to check file extensions and encrypt if it doesn't get in conflict.</p>
+<p>Day 2:</p>
+<p>Alright so today I got a little bit near to success, as I found out where malware decrypts strings. And luckly it doesn't encrypt back so i can dump them all. it is going to help a lot for success.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/13.png?raw=true" alt="1|800" /></p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/4.png?raw=true" alt="1|800" /></p>
+<p>Note: I will dump as many as strings possible (all of them) and save it in a file and save in github repo.</p>
+<p>Additionally, I found out malware uses GetProcAddress to get NtWriteFile address and call it in a stealthy way. How it works is exactly like this:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/5.png?raw=true" alt="1|800" /></p>
+<p>Changes function itself with "NtWriteFile" address, so next time it calls this function, it actually calls itself. Same thing was done for other functions too, like: NtReadFile, NtCreateKeyedEvent...</p>
+<p>Process of encryption:</p>
+<p>NtCreateFile: get file handle
+NtQueryInformationVolume, NtQueryInformationFile: Check the extension of file (eg. .exe) compare with blacklisted extensions and choose to encrypt or not.  The flags that can be configured before running ransomware are: skip, step, n, p, fast, accounts. In my version of agenda ransomware there is no guide on how to use them and some flags that are available in newer versions are not available to me. Example usage is this: " ./ransomware.exe --password test "skip: 10; fast" "</p>
+<p>NtCloseFile</p>
+<p>NtReadFile: Read contents, encypt them.</p>
+<p>NtWriteFile: Write encrypted content.</p>
+<p>Now, where is content encypted? in my version of agenda ransomware, function is located at <code>0x42edf0</code> which, using registers as arguments instead of stack. The decompiled function has length of around 875 lines, which is waste of time to analyze one by one. But it is the function. Additonally, analyzing this function will reveal the key itself.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/6.png?raw=true" alt="1|800" /></p>
+<div style="break-before: page; page-break-before: always;"></div><div style="break-before: page; page-break-before: always;"></div><p>File is probably dropper, trying to install dangerous malware from spinistry.com.</p>
+<p>The malware has actually a few more steps,, creating a new file to keep running from different directory. All files will be placed on the directory about analysis.</p>
+<p>In our case fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.exe is dropper.</p>
+<p>I used Immunity Debugger for this analysis to learn working with it. Also I got screenshot of all instructions after binary is decompressed.</p>
+<h3 id="explanation-of-instructions"><a class="header" href="#explanation-of-instructions">Explanation of instructions</a></h3>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/1.png?raw=true" alt="1|1000" /></p>
+<p>0x401035: Handles are used to make sure only 1 process of malware is running, so nothing will go wrong. (If EAX is equal to -1 it will ExitProcess)
+0x40104A: HeapCreate and tlAllocateHeap is mostly used for stealth and show the malware as legit software, but I don't really know the usage in this malware.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/2.png?raw=true" alt="1|1000" /></p>
+<p>0x401080: Getting TempPath, such as: "C:\Windows\Users&lt;username&gt;\AppData\Local\Temp".</p>
+<p>0x4010B2: Creates file named "rewok.exe" in Temp directory.
+(NOTE: rewok.exe is dropper's copy)
+In case of success program will continue, else LEAVE.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/4.png?raw=true" alt="1|1000" /></p>
+<p>0x4011A5: I guess it opens Temp path.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/5.png?raw=true" alt="1|1000" />
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/6.png?raw=true" alt="1|1000" /></p>
+<p>0x4011F9 - 0x4012B2 - creates Http request:</p>
+<ul>
+<li>HTTP Headers
+<ul>
+<li>Method: <code>GET</code></li>
+<li>URI: <code>/wp-share/7eve.exe</code></li>
+<li>Version: <code>HTTP/1.1</code></li>
+<li>Accept: <code>text/*, application/*</code></li>
+<li>User-Agent: <code>Updates downloader</code></li>
+<li>Host: <code>spinistry.com</code></li>
+<li>Cache-Control: <code>no-cache</code></li>
+<li>Transport Layer Protocol: <code>TCP</code></li>
+<li>Destination IP: ``</li>
+<li>Destination port: <code>443</code></li>
+<li>SSL encrypted: <code>Yes</code></li>
+<li>Network mode: <code>singlehost</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/7.png?raw=true" alt="1|1000" /></p>
+<p>If it has success it will ReadFile. (In our case it didn't, because it is late.)</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_1/Malware_instructions/8.png?raw=true" alt="1|1000" /></p>
+<p>0x40132F: Also, after success File is renamed rewoked.exe.</p>
+<p>I guess it was everything about that dropper malware, I will attach all other files i used in analysis.</p>
+<p>NOTE: I am new to Malware Analysis so I try to practice a lot to learn, if I make mistakes I would appreciate the help.</p>
+<div style="break-before: page; page-break-before: always;"></div><p>As I was looking out for new malwares appearing online, i saw another PE32 executable malware and just decided to check it out, this malware was actually pretty simple.
+The purpose of the malware is use as much resource (RAM, CPU) as possible by copying itself and creating new process of itself. But honestly it was good malware to help me improve myself.</p>
+<p>Simple demonstration of malware's capability:
+<video width="600" controls>
+<source src="https://github.com/basicacc/basicacc.github.io/raw/refs/heads/main/My_analysis/Malware_2/malware.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video></p>
+<p>By just looking at it, it is obvious what type of API calls are made:
+NtReadFile
+NtCreateFile
+NtWriteFile
+CreateProcessW</p>
+<p>When uploading malware to DIE (detect it easy), it shows .text section is packed or compressed. Which is not really our problem because the dangerous part of malware starts at <code>0x00429EA6</code>. I wouldn't look at each assembly instruction starting from that address, but at <code>0x0042A34F</code> things get a little bit interesting.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_name_creation/1.png?raw=true" alt="1|1500" /></p>
+<p>This part writes full path name of malware to data and moves data address to eax, result will be something like that:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_name_creation/2.png?raw=true" alt="1|1000" />
+as you can see x32dbg shows what eax points to at the moment.</p>
+<p>In this malware, internal functions within the VBA runtime environment have been called, which sadly didn't help me a lot, I couldn't get information about some functions like this one:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_Read_File/1.png?raw=true" alt="1|1000" /></p>
+<p>But one thing I know about this function is, it actually calls NtReadFile, which will copy our malicious binary into heap: (First 4 bytes are file's handle which was returned by NtOpenFile but I didn't specify it, as it didn't matter a lot)
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_Read_File/2.png?raw=true" alt="1|1000" />
+As you can see in stack, data will be copied to <code>0x55C1B0</code>:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_Read_File/3.png?raw=true" alt="1|1000" /></p>
+<p>Later, the malware will create a full name for copying itself into that binary, which I didn't go deep into the creation process but that's how it looks:
+<code>C:\\Users\\eyes\\Desktop\\Malware\\Unicorn-17737.exe</code></p>
+<p>The part we have to check right now is: <code>0x0042A5DB-0x0042A614</code>. Why? Because this is the part where data will be written into the "full path name" malware created:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_Read_File/4.png?raw=true" alt="1|1000" /></p>
+<p>We have a __vbaPutOwner3 function which will call NtWriteFile, it makes sense as __vbaGetOwner3 called NtReadFile.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/Binary_Read_File/5.png?raw=true" alt="1|1000" /></p>
+<p>File handle is <code>0x210</code> it was created when NtOpenFile was called (didn't specify it), Offset is <code>0x0</code> Size is <code>0x75005</code> (which is whole binary size) and <code>0x5DC1B0</code> is heap address where data resides.</p>
+<p>Now one last thing is left, <code>CreateProcessW</code>, The call starts from <code>0x0042A614</code> to <code>rtcShell</code> which later Creates process.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/New_Process_Create/1.png?raw=true" alt="1|1000" /></p>
+<p>The address is "string data" address of  new created binary's full name:
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_2/New_Process_Create/2.png?raw=true" alt="1|1000" /></p>
+<p>And that's it, it will create new process and that process will create new one, it will continue forever.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

