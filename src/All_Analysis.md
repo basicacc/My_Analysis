@@ -29,6 +29,11 @@ sha256: [fa462108bc863ef19bb7572e7c77ab4f4b5694ae292e06d007418863e4b45d7e](Snake
 sha256: [e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527](AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.html)
 
 [VirusTotal](https://www.virustotal.com/gui/file/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527/details)
+
+### MASSLOGGER Malware
+sha256: [7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624](MassLogger/7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624.html)
+
+[VirusTotal](https://www.virustotal.com/gui/file/7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624/details)
 ### Analyzed just for practice and fun
 
 SHA256: [fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894](Malware_1/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.html)

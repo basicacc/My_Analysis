@@ -18,6 +18,9 @@
 - [AgendaRansomware](AgendaRansomware/empty.md)
 	- [Ransomware](AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.md)
 
+* [MassLogger](MassLogger/empty.md)
+	* [Logger](MassLogger/7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624.md)
+
 - [Analyzed for fun](Malware_1/empty.md)
 	- [1](Malware_1/fa132c7ca003a5fd97d96c3b656212802cf70f1735283b05144bdcae03e24894.md)
 	- [2](Malware_2/48126e558daec7e93f455c1268e37cab6e4754e245568fc6d8beb54277addef7.md)

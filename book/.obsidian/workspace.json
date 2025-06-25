@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.md",
+                "file": "MassLogger/7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527"
+              "title": "7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624"
             }
           }
         ]
@@ -168,13 +168,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2cc646ce62ec7279",
+  "active": "0a2b7b3f41972d76",
   "lastOpenFiles": [
+    "SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md",
+    "MassLogger/7e3317f91f7d8e570800045ca8ba7e2ff136e0ea3621ed1deca8b7763b45f624.md",
+    "MassLogger/empty.md",
     "SUMMARY.md",
+    "All_Analysis.md",
+    "MassLogger",
     "AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.md",
     "Remcos/52db756a72b71d461eb46a8f40e04c6e594c1f3c5da27901c2a47f890dd279f8.md",
     "AgendaRansomware/empty.md",
-    "All_Analysis.md",
     "AgendaRansomware/e90bdaaf5f9ca900133b699f18e4062562148169b29cb4eb37a0577388c22527.html.md",
     "README.md",
     "AgendaRansomware",
@@ -183,7 +187,6 @@
     "SmokeLoader/empty.md",
     "SnakeKeylogger/empty.md",
     "Vidar/empty.md",
-    "SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md",
     "SmokeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.html.md",
     "SomeLoader/ff5fc5c5318fa051992c7c3408d203f306c13b5fcd9400f860f734ce47a3b676.md",
     "Vidar/b30e7cf92bdb26c05c226e0d5c82ce839a90cbef61a7a5305bd3fae87905090f.md",
